@@ -1,0 +1,78 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/CinemaProject
+
+
+## Ignore build results
+bin/
+obj/
+
+## Ignore Visual Studio working folder
+.vs/
+
+## Ignore user-specific files
+*.user
+*.suo
+*.userprefs
+
+## Ignore auto-generated build files
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.ldb
+
+## .NET Core files generated during build
+**/staticwebassets.build.json
+**/staticwebassets.development.json
+**/appsettings.development.json
+
+## Ignore publish output
+publish/
+
+## Ignore backup & temp files
+*.tmp
+*.bak
+*.old
+
+## Ignore package restore files
+packages/
+*.nupkg
+
+## Ignore Rider / JetBrains
+.idea/
+*.DotSettings.user
+
+## Ignore VS Code
+.vscode/
+
+## Ignore Test result files
+TestResult*/
+TestResults/
+*.coverage
+*.coveragexml
+
+## ASP.NET generated file lists
+*.FileListAbsolute.txt
+
+## Ignore ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+## Ignore NuGet
+*.nuget.props
+*.nuget.targets
+
+## Ignore MSBuild files
+*.msbuild.binlog
+
+## Ignore local db files
+*.mdf
+*.ldf
+
+## Ignore cache folders
+*.db
+*.cache/
