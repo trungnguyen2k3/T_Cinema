@@ -76,3 +76,5 @@ _ReSharper*/
 ## Ignore cache folders
 *.db
 *.cache/
+## Ignore node modules
+*.node_modules

@@ -16,6 +16,7 @@ namespace CinemaBE.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAccounts()
         {
+            var accounts = await _accountService.GetAccountsAsync();
             return  Ok(await _accountService.GetAccountsAsync());
         }
     }
