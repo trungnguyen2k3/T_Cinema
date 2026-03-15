@@ -11,9 +11,9 @@ namespace CinemaBE.Services
             _db = db; 
         }
 
-        public async Task<IEnumerable<TblAccount>> GetAccountsAsync()
+        public async Task<IEnumerable<SysAccount>> GetAccountsAsync()
         {
-            var accounts = _db.TblAccounts.ToListAsync();
+            var accounts = _db.SysAccounts.ToListAsync();
             return await accounts;
         }
     }

@@ -4,6 +4,6 @@ namespace CinemaBE.Services
 {
     public interface IAccountService
     {
-        public Task<IEnumerable<TblAccount>> GetAccountsAsync();
+        public Task<IEnumerable<SysAccount>> GetAccountsAsync();
     }
 }
