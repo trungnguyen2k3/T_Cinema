@@ -78,3 +78,5 @@ _ReSharper*/
 *.cache/
 ## Ignore node modules
 *.node_modules
+## Ignore app setting
+*.appsettings.json
