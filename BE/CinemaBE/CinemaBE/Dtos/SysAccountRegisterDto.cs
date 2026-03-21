@@ -16,7 +16,7 @@ namespace CinemaBE.Dtos
         public string? Fullname { get; set; }
         public DateOnly? Dob { get; set; }
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; } 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]
         [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
         public string? PhoneNumber { get; set; }
