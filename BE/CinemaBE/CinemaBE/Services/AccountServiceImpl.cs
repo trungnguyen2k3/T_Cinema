@@ -1,4 +1,5 @@
-﻿using CinemaBE.Dtos;
+﻿using CinemaBE.Commons;
+using CinemaBE.Dtos;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,33 +20,66 @@ namespace CinemaBE.Services
             return await accounts;
         }
 
-        public async Task<SysAccountResponseDto> RegisterAccountAsync(SysAccountRegisterDto sysAccountRegisterDto)
+        public async Task<ApiResponse<SysAccountLoginResponseDto>> LoginAccountAsync(SysAccountLoginRequestDto dto)
         {
-            if (sysAccountRegisterDto.Password != sysAccountRegisterDto.ConfirmPassword)
-                throw new Exception("Mật khẩu xác nhận không khớp");
 
-            string username = sysAccountRegisterDto.Username.Trim();
-            string email = sysAccountRegisterDto.Email.Trim().ToLower();
-            string phone = sysAccountRegisterDto.PhoneNumber!.Trim();
+            var account = await _db.SysAccounts.FirstOrDefaultAsync(x => x.Username == dto.Username);
+            if (account == null)
+            {
+                throw new AppException("User name không tồn tại", 404);
+            }
+            if (!AccountHelper.VerifyPassword(dto.Password, account.Password))
+            {
+                throw new AppException("Sai mật khẩu");
+            }
+            if(account.Status == false)
+            {
+                throw new AppException("Tài khoản đã bị khóa",403);
+            }
+            var result = new SysAccountLoginResponseDto
+            {
+                Id = account.Id,
+                Username = account.Username,
+                Role = account.Role,
+                FullName = account.FullName,
+                Email = account.Email,
+                PhoneNumber = account.PhoneNumber,
+                Gender = account.Gender,
+                Dob = account.Dob,
+                Status = account.Status,
+                CreateAt = account.CreateAt,
+                UpdateAt = account.UpdateAt,
+            };
+            return ApiResponse<SysAccountLoginResponseDto>.SuccessResult(result, "Đăng nhập thành công");
+            }
+
+        public async Task<SysAccountResponseDto> RegisterAccountAsync(SysAccountRegisterDto dto)
+        {
+            if (dto.Password != dto.ConfirmPassword)
+                throw new AppException("Mật khẩu xác nhận không khớp");
+
+            string username = dto.Username.Trim();
+            string email = dto.Email.Trim().ToLower();
+            string phone = dto.PhoneNumber!.Trim();
 
             if (await _db.SysAccounts.AnyAsync(x => x.Username == username))
-                throw new Exception("Username đã tồn tại");
+                throw new AppException("Username đã tồn tại");
 
             if (await _db.SysAccounts.AnyAsync(x => x.Email == email))
-                throw new Exception("Email đã tồn tại");
+                throw new AppException("Email đã tồn tại");
 
             if (await _db.SysAccounts.AnyAsync(x => x.PhoneNumber == phone))
-                throw new Exception("Số điện thoại đã tồn tại");
+                throw new AppException("Số điện thoại đã tồn tại");
 
             var account = new SysAccount
             {
                 Username = username,
                 Email = email,
                 PhoneNumber = phone,
-                Password = AccountHelper.HashPassword(sysAccountRegisterDto.Password),
-                FullName = sysAccountRegisterDto.Fullname,
-                Dob = sysAccountRegisterDto.Dob,
-                Role = "User",
+                Password = AccountHelper.HashPassword(dto.Password),
+                FullName = dto.Fullname,
+                Dob = dto.Dob,
+                Role = "USER",
                 Status = true
             };
 
@@ -58,6 +92,7 @@ namespace CinemaBE.Services
                 Username = account.Username,
                 Dob = account.Dob,
                 Email = account.Email,
+                FullName = dto.Fullname,
                 PhoneNumber = account.PhoneNumber,
                 Role = account.Role,
                 Status = account.Status
