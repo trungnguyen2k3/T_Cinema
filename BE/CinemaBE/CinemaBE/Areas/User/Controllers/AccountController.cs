@@ -20,7 +20,7 @@ namespace CinemaBE.Areas.User.Controllers
         public async Task<IActionResult> GetAccounts()
         {
             var accounts = await _accountService.GetAccountsAsync();
-            return  Ok(await _accountService.GetAccountsAsync());
+            return  Ok(accounts);
         }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequestDto dto)
@@ -53,7 +53,7 @@ namespace CinemaBE.Areas.User.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAccount(LoginRequestDto dto)
+        public async Task<IActionResult> LoginAccount([FromBody] LoginRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
