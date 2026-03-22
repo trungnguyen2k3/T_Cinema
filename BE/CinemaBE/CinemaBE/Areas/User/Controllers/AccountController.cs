@@ -1,5 +1,5 @@
 ﻿using CinemaBE.Commons;
-using CinemaBE.Dtos;
+using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ namespace CinemaBE.Areas.User.Controllers
             return  Ok(await _accountService.GetAccountsAsync());
         }
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAccount([FromBody] SysAccountRegisterDto dto)
+        public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +38,7 @@ namespace CinemaBE.Areas.User.Controllers
             try
             {
                 var result = await _accountService.RegisterAccountAsync(dto);
-                return Ok(ApiResponse<SysAccountResponseDto>.SuccessResult(result, "Đăng ký tài khoản thành công"));
+                return Ok(ApiResponse<RegisterResponseDto>.SuccessResult(result, "Đăng ký tài khoản thành công"));
             }
             catch (AppException ex)
             {
@@ -53,7 +53,7 @@ namespace CinemaBE.Areas.User.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAccount(SysAccountLoginRequestDto dto)
+        public async Task<IActionResult> LoginAccount(LoginRequestDto dto)
         {
             if (!ModelState.IsValid)
             {

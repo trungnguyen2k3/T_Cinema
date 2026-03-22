@@ -1,5 +1,5 @@
 ﻿using CinemaBE.Commons;
-using CinemaBE.Dtos;
+using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace CinemaBE.Services
             return await accounts;
         }
 
-        public async Task<ApiResponse<SysAccountLoginResponseDto>> LoginAccountAsync(SysAccountLoginRequestDto dto)
+        public async Task<ApiResponse<LoginResponseDto>> LoginAccountAsync(LoginRequestDto dto)
         {
 
             var account = await _db.SysAccounts.FirstOrDefaultAsync(x => x.Username == dto.Username);
@@ -36,7 +36,7 @@ namespace CinemaBE.Services
             {
                 throw new AppException("Tài khoản đã bị khóa",403);
             }
-            var result = new SysAccountLoginResponseDto
+            var result = new LoginResponseDto
             {
                 Id = account.Id,
                 Username = account.Username,
@@ -50,10 +50,10 @@ namespace CinemaBE.Services
                 CreateAt = account.CreateAt,
                 UpdateAt = account.UpdateAt,
             };
-            return ApiResponse<SysAccountLoginResponseDto>.SuccessResult(result, "Đăng nhập thành công");
+            return ApiResponse<LoginResponseDto>.SuccessResult(result, "Đăng nhập thành công");
             }
 
-        public async Task<SysAccountResponseDto> RegisterAccountAsync(SysAccountRegisterDto dto)
+        public async Task<RegisterResponseDto> RegisterAccountAsync(RegisterRequestDto dto)
         {
             if (dto.Password != dto.ConfirmPassword)
                 throw new AppException("Mật khẩu xác nhận không khớp");
@@ -86,7 +86,7 @@ namespace CinemaBE.Services
             await _db.SysAccounts.AddAsync(account);
             await _db.SaveChangesAsync();
 
-            return new SysAccountResponseDto
+            return new RegisterResponseDto
             {
                 Id = account.Id,
                 Username = account.Username,

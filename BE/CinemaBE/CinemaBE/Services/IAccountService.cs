@@ -1,5 +1,5 @@
 ﻿using CinemaBE.Commons;
-using CinemaBE.Dtos;
+using CinemaBE.Dtos.Accounts;
 using CinemaBE.Models;
 
 namespace CinemaBE.Services
@@ -7,7 +7,7 @@ namespace CinemaBE.Services
     public interface IAccountService
     {
         public Task<IEnumerable<SysAccount>> GetAccountsAsync();
-        public Task<SysAccountResponseDto> RegisterAccountAsync(SysAccountRegisterDto sysAccountRegisterDto);
-        public Task<ApiResponse<SysAccountLoginResponseDto>> LoginAccountAsync(SysAccountLoginRequestDto sysAccountLoginRequestDto);
+        public Task<RegisterResponseDto> RegisterAccountAsync(RegisterRequestDto sysAccountRegisterDto);
+        public Task<ApiResponse<LoginResponseDto>> LoginAccountAsync(LoginRequestDto sysAccountLoginRequestDto);
     }
 }
