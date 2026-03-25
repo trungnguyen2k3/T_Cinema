@@ -2,7 +2,9 @@
 using CinemaBE.Dtos;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
+using CinemaBE.Hubs; 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CinemaBE.Services
 {
