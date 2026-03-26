@@ -2,6 +2,7 @@
 using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
+using CinemaBE.Tests.IntegrationTests;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaBE.Services
@@ -14,13 +15,79 @@ namespace CinemaBE.Services
             _db = db; 
         }
 
-        public async Task<IEnumerable<SysAccount>> GetAccountsAsync()
+        public async Task<GetAccountResponseDto> DeleteAccountAsync(int id)
         {
-            var accounts = _db.SysAccounts.ToListAsync();
-            return await accounts;
+            var account = await _db.SysAccounts.FindAsync(id);
+            if (account == null || account.Status == false)
+            {
+                throw new AppException("Tài khoản không có hoặc đã bị xóa",404);
+            }
+            account.Status = false;
+            await _db.SaveChangesAsync();
+            var accounts = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).FirstOrDefaultAsync();
+            return accounts;
+
         }
 
-        public async Task<ApiResponse<LoginResponseDto>> LoginAccountAsync(LoginRequestDto dto)
+        public async Task<IEnumerable<GetAccountResponseDto>> GetAccountsAsync()
+        {
+            var accounts = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).ToListAsync();
+           
+            return accounts;
+        }
+
+        public async Task<GetAccountResponseDto> GetByIdAsync(int id)
+        {
+            
+            var account = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).Where(x=> x.Id == id).FirstOrDefaultAsync();
+
+            if(account == null)
+            {
+                throw new AppException("Tài khoản không tồn tại", 404);
+            }
+            return account;
+        }
+
+        public async Task<LoginResponseDto> LoginAccountAsync(LoginRequestDto dto)
         {
 
             var account = await _db.SysAccounts.FirstOrDefaultAsync(x => x.Username == dto.Username);
@@ -50,7 +117,7 @@ namespace CinemaBE.Services
                 CreateAt = account.CreateAt,
                 UpdateAt = account.UpdateAt,
             };
-            return ApiResponse<LoginResponseDto>.SuccessResult(result, "Đăng nhập thành công");
+            return result;
             }
 
         public async Task<RegisterResponseDto> RegisterAccountAsync(RegisterRequestDto dto)
@@ -96,6 +163,27 @@ namespace CinemaBE.Services
                 PhoneNumber = account.PhoneNumber,
                 Role = account.Role,
                 Status = account.Status
+            };
+        }
+
+        public async Task<UpdateAccountResponseDto> UpdateAccountAsync(UpdatetAccountRequestDto updatetAccountRequestDto)
+        {
+           var account = await _db.SysAccounts.Where(x => x.Id == updatetAccountRequestDto.Id).FirstOrDefaultAsync();
+            if (account == null) {
+                throw new AppException("Tài khoản không tồn tại", 404);
+            }
+            account.PhoneNumber = updatetAccountRequestDto.PhoneNumber;
+            account.Password = AccountHelper.HashPassword(updatetAccountRequestDto.Password);
+            account.FullName = updatetAccountRequestDto.FullName;
+            account.Gender = updatetAccountRequestDto.Gender;
+            account.Dob = updatetAccountRequestDto.Dob;
+            _db.SaveChangesAsync();
+            return new UpdateAccountResponseDto
+            {
+                FullName = account.FullName,
+                Gender = account.Gender,
+                PhoneNumber = account.PhoneNumber,
+                Dob = account.Dob,
             };
         }
     }

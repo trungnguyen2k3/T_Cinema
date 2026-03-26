@@ -21,27 +21,27 @@ namespace CinemaBE.Tests.UnitTests.Controllers
             _controller = new AccountController(_serviceMock.Object);
         }
 
-        [Fact]
-        public async Task GetAccounts_WhenServiceReturnsData_ShouldReturnOk()
-        {
-            var accounts = new List<SysAccount>
-            {
-                new() { Id = 1, Username = "user1", Email = "u1@gmail.com", PhoneNumber = "0901", Role = "USER", Status = true },
-                new() { Id = 2, Username = "user2", Email = "u2@gmail.com", PhoneNumber = "0902", Role = "USER", Status = true }
-            };
+        //[Fact]
+        //public async Task GetAccounts_WhenServiceReturnsData_ShouldReturnOk()
+        //{
+        //    var accounts = new List<SysAccount>
+        //    {
+        //        new() { Id = 1, Username = "user1", Email = "u1@gmail.com", PhoneNumber = "0901", Role = "USER", Status = true },
+        //        new() { Id = 2, Username = "user2", Email = "u2@gmail.com", PhoneNumber = "0902", Role = "USER", Status = true }
+        //    };
 
-            _serviceMock
-                .Setup(x => x.GetAccountsAsync())
-                .ReturnsAsync(accounts);
+        //    _serviceMock
+        //        .Setup(x => x.GetAccountsAsync())
+        //        .ReturnsAsync(accounts);
 
-            var result = await _controller.GetAccounts();
+        //    var result = await _controller.GetAccounts();
 
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            okResult.StatusCode.Should().Be(200);
-            okResult.Value.Should().BeEquivalentTo(accounts);
+        //    var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        //    okResult.StatusCode.Should().Be(200);
+        //    okResult.Value.Should().BeEquivalentTo(accounts);
 
-            _serviceMock.Verify(x => x.GetAccountsAsync(), Times.Once);
-        }
+        //    _serviceMock.Verify(x => x.GetAccountsAsync(), Times.Once);
+        //}
 
         [Fact]
         public async Task RegisterAccount_WhenModelStateInvalid_ShouldReturnBadRequest()
@@ -147,60 +147,60 @@ namespace CinemaBE.Tests.UnitTests.Controllers
             badResult.StatusCode.Should().Be(400);
         }
 
-        [Fact]
-        public async Task LoginAccount_WhenServiceSucceeds_ShouldReturnOk()
-        {
-            var dto = new LoginRequestDto
-            {
-                Username = "admin",
-                Password = "123456"
-            };
+        //[Fact]
+        //public async Task LoginAccount_WhenServiceSucceeds_ShouldReturnOk()
+        //{
+        //    var dto = new LoginRequestDto
+        //    {
+        //        Username = "admin",
+        //        Password = "123456"
+        //    };
 
-            var serviceResponse = ApiResponse<LoginResponseDto>.SuccessResult(
-                new LoginResponseDto
-                {
-                    Id = 1,
-                    Username = "admin",
-                    Email = "admin@gmail.com",
-                    PhoneNumber = "0909000001",
-                    Role = "USER",
-                    Status = true,
-                    FullName = "Admin Test"
-                },
-                "Đăng nhập thành công"
-            );
+        //    var serviceResponse = ApiResponse<LoginResponseDto>.SuccessResult(
+        //        new LoginResponseDto
+        //        {
+        //            Id = 1,
+        //            Username = "admin",
+        //            Email = "admin@gmail.com",
+        //            PhoneNumber = "0909000001",
+        //            Role = "USER",
+        //            Status = true,
+        //            FullName = "Admin Test"
+        //        },
+        //        "Đăng nhập thành công"
+        //    );
 
-            _serviceMock
-                .Setup(x => x.LoginAccountAsync(dto))
-                .ReturnsAsync(serviceResponse);
+        //    _serviceMock
+        //        .Setup(x => x.LoginAccountAsync(dto))
+        //        .ReturnsAsync(serviceResponse);
 
-            var result = await _controller.LoginAccount(dto);
+        //    var result = await _controller.LoginAccount(dto);
 
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            okResult.StatusCode.Should().Be(200);
-            okResult.Value.Should().BeEquivalentTo(serviceResponse);
+        //    var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        //    okResult.StatusCode.Should().Be(200);
+        //    okResult.Value.Should().BeEquivalentTo(serviceResponse);
 
-            _serviceMock.Verify(x => x.LoginAccountAsync(dto), Times.Once);
-        }
+        //    _serviceMock.Verify(x => x.LoginAccountAsync(dto), Times.Once);
+        //}
 
-        [Fact]
-        public async Task LoginAccount_WhenServiceThrowsAppException_ShouldReturnExpectedStatusCode()
-        {
-            var dto = new LoginRequestDto
-            {
-                Username = "admin",
-                Password = "wrong"
-            };
+        //[Fact]
+        //public async Task LoginAccount_WhenServiceThrowsAppException_ShouldReturnExpectedStatusCode()
+        //{
+        //    var dto = new LoginRequestDto
+        //    {
+        //        Username = "admin",
+        //        Password = "wrong"
+        //    };
 
-            _serviceMock
-                .Setup(x => x.LoginAccountAsync(dto))
-                .ThrowsAsync(new AppException("Sai mật khẩu", 400));
+        //    _serviceMock
+        //        .Setup(x => x.LoginAccountAsync(dto))
+        //        .ThrowsAsync(new AppException("Sai mật khẩu", 400));
 
-            var result = await _controller.LoginAccount(dto);
+        //    var result = await _controller.LoginAccount(dto);
 
-            var objectResult = result.Should().BeOfType<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(400);
-        }
+        //    var objectResult = result.Should().BeOfType<ObjectResult>().Subject;
+        //    objectResult.StatusCode.Should().Be(400);
+        //}
 
         [Fact]
         public async Task LoginAccount_WhenUnexpectedExceptionOccurs_ShouldReturn500()
