@@ -1,6 +1,6 @@
-﻿namespace CinemaBE.Dtos
+﻿namespace CinemaBE.Dtos.Accounts
 {
-    public class SysAccountResponseDto
+    public class RegisterResponseDto
     {
         public int Id { get; set; }
         public string Username { get; set; } = null!;

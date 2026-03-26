@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CinemaBE.Dtos
+namespace CinemaBE.Dtos.Accounts
 {
-    public class SysAccountRegisterDto
+    public class RegisterRequestDto
     {
         [Required(ErrorMessage ="Username không được để trống")]
         public string Username { get; set; } = null!;

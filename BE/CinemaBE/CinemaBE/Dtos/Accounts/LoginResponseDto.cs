@@ -1,8 +1,8 @@
 ﻿using CinemaBE.Models;
 
-namespace CinemaBE.Dtos
+namespace CinemaBE.Dtos.Accounts
 {
-    public class SysAccountLoginResponseDto
+    public class LoginResponseDto
     {
         public int Id { get; set; }
 

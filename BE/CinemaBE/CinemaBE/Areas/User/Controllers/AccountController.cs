@@ -1,9 +1,8 @@
 ﻿using CinemaBE.Commons;
-using CinemaBE.Dtos;
+using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Services;
 using Microsoft.AspNetCore.Mvc;
-
 namespace CinemaBE.Areas.User.Controllers
 {
     [Area("User")]
@@ -19,11 +18,45 @@ namespace CinemaBE.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAccounts()
         {
-            var accounts = await _accountService.GetAccountsAsync();
-            return  Ok(await _accountService.GetAccountsAsync());
+            try
+            {
+                var accounts = await _accountService.GetAccountsAsync();
+                return Ok(
+                    ApiResponse<IEnumerable<GetAccountResponseDto>>.SuccessResult(
+                        accounts,
+                        "Lấy danh sách tài khoản thành công"
+                    )
+                );
+            }
+            catch (AppException ex)
+            {
+                return StatusCode(
+                    ex.StatusCode,
+                    ApiResponse<object>.ErrorResult(ex.Message)
+                );
+            }
+           
         }
+        [HttpGet("getById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var account = await _accountService.GetByIdAsync(id);
+                return Ok(ApiResponse<GetAccountResponseDto>.SuccessResult(account,"Lấy người dùng thành công"));
+            }
+            catch (AppException ex)
+            {
+                return StatusCode(
+                    ex.StatusCode,
+                    ApiResponse<object>.ErrorResult(ex.Message)
+                    );
+            }
+        }
+      
+
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAccount([FromBody] SysAccountRegisterDto dto)
+        public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +71,7 @@ namespace CinemaBE.Areas.User.Controllers
             try
             {
                 var result = await _accountService.RegisterAccountAsync(dto);
-                return Ok(ApiResponse<SysAccountResponseDto>.SuccessResult(result, "Đăng ký tài khoản thành công"));
+                return Ok(ApiResponse<RegisterResponseDto>.SuccessResult(result, "Đăng ký tài khoản thành công"));
             }
             catch (AppException ex)
             {
@@ -53,7 +86,7 @@ namespace CinemaBE.Areas.User.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAccount(SysAccountLoginRequestDto dto)
+        public async Task<IActionResult> LoginAccount([FromBody] LoginRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +96,7 @@ namespace CinemaBE.Areas.User.Controllers
             try
             {
                 var result = await _accountService.LoginAccountAsync(dto);
-                return Ok(result);
+                return Ok(ApiResponse<LoginResponseDto>.SuccessResult(result,"Đăng nhập thành công"));
             }
             catch (AppException ex)
             {
@@ -77,6 +110,42 @@ namespace CinemaBE.Areas.User.Controllers
                 ApiResponse<object>.ErrorResult("Lỗi hệ thống")
             );
             }
+        }
+        [HttpPut("update-account")]
+        public async Task<IActionResult> UpdateAccount([FromBody] UpdatetAccountRequestDto dto)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(
+                    ApiResponse<object>.ErrorResult("Dữ liệu không hợp lệ", ModelStateHelper.GetErrors(ModelState)));
+            }
+            try
+            {
+                var account = await _accountService.UpdateAccountAsync(dto);
+                return Ok(ApiResponse<UpdateAccountResponseDto>.SuccessResult(account, "Cập nhật thành công"));
+            } catch (AppException ex) {
+                return StatusCode(ex.StatusCode, ApiResponse<object>.ErrorResult(ex.Message));
+            } catch (Exception ex) {
+                return StatusCode(500, ApiResponse<object>.ErrorResult(ex.Message));
+            }
+        }
+
+        [HttpDelete("delete-account")]
+        public async Task<IActionResult> DeleteAccount(int accountId)
+        {
+            try
+            {
+                var account = await _accountService.DeleteAccountAsync(accountId);
+                return Ok(ApiResponse<bool>.SuccessResult(true, "Xóa thành công"));
+            }
+            catch(AppException ex)
+            {
+                return StatusCode(ex.StatusCode, ApiResponse<object>.ErrorResult(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.ErrorResult(ex.Message));
+            }
+
         }
     }
 }
