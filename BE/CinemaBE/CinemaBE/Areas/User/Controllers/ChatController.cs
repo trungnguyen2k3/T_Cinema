@@ -1,6 +1,5 @@
 ﻿using CinemaBE.Dtos;
 using CinemaBE.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaBE.Areas.User.Controllers
@@ -15,7 +14,6 @@ namespace CinemaBE.Areas.User.Controllers
         {
             _chatService = chatService;
         }
-
         // Hàm POSt gửi tin nhắn từ client lên server
         // endpoint:  api/chat/send
         [HttpPost("send")]
@@ -43,13 +41,12 @@ namespace CinemaBE.Areas.User.Controllers
 
         // Hàm POST lấy cuộc trò chuyện giữa 2 người dùng
         // GET: api/chat/conversation?user1Id=1&user2Id=2
-
         [HttpGet("conversation")]
-        public async Task<IActionResult> GetConversation([FromQuery] int userId1, [FromQuery] int userId2)
+        public async Task<IActionResult> GetConversation([FromQuery] int user1Id, [FromQuery] int user2Id)
         {
             try
             {
-                var result = await _chatService.GetConversationAsync(userId1, userId2);
+                var result = await _chatService.GetConversationAsync(user1Id, user2Id);
                 return Ok(new
                 {
                     success = true,
@@ -66,20 +63,29 @@ namespace CinemaBE.Areas.User.Controllers
                 });
             }
         }
-
         // Hàm PUT đánh dấu tất cả tin nhắn từ chatUserId đến currentUserId là đã đọc
+
         [HttpPut("mark-as-read")]
         public async Task<IActionResult> MarkAsRead([FromBody] MarkAsReadRequest request)
         {
             try
             {
                 var count = await _chatService.MarkAsReadAsync(request.CurrentUserId, request.ChatUserId);
-                return Ok(new { count });
+                return Ok(new
+                {
+                    success = true,
+                    message = "Đánh dấu đã đọc thành công",
+                    data = count
+                });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
             }
         }
-    } 
+    }
 }

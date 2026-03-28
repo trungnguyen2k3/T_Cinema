@@ -22,6 +22,45 @@ namespace CinemaBE.Areas.User.Controllers
             var accounts = await _accountService.GetAccountsAsync();
             return  Ok(await _accountService.GetAccountsAsync());
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllAccount()
+        {
+            try
+            {
+                var accounts = await _accountService.GetAccountsAsync();
+                var result = accounts.Select(x => new
+                {
+                    Id = x.Id,
+                    Username = x.Username,
+                    Role = x.Role,
+                    FullName = x.FullName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Gender = x.Gender,
+                    Dob = x.Dob,
+                    Status = x.Status,
+                    CreateAt = x.CreateAt,
+                    UpdateAt = x.UpdateAt,
+
+                });
+                return Ok(new
+                {
+                    success = true,
+                    message = "Lấy All Account thành công",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAccount([FromBody] SysAccountRegisterDto dto)
         {
