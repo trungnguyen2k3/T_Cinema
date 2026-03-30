@@ -58,21 +58,18 @@ if (app.Environment.IsDevelopment())
 
 // 8. Middleware pipeline
 
-// Tạm comment dòng này nếu muốn test SignalR local qua HTTP cho dễ
+// Nếu test local bằng HTTP thì có thể tạm comment
 // app.UseHttpsRedirection();
 
-// BẮT BUỘC phải có dòng này để CORS hoạt động
 app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
-// 9. Map controller API
+// 9. Map endpoint
 app.MapControllers();
-
-app.Run();
-public partial class Program { }
-// 10. Map SignalR Hub cho chat realtime
 app.MapHub<ChatHub>("/chatHub");
 
-// 11. Run app
+// 10. Run app
 app.Run();
+
+public partial class Program { }

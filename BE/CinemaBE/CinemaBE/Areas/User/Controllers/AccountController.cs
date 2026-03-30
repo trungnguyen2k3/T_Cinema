@@ -37,7 +37,6 @@ namespace CinemaBE.Areas.User.Controllers
             }
            
         }
-<<<<<<< HEAD
         [HttpGet("getById")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -55,7 +54,6 @@ namespace CinemaBE.Areas.User.Controllers
             }
         }
       
-=======
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAccount()
@@ -94,7 +92,6 @@ namespace CinemaBE.Areas.User.Controllers
                 });
             }
         }
->>>>>>> fix_note_25_03_2026_thanh
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequestDto dto)
