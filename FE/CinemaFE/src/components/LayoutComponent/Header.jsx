@@ -1,3 +1,4 @@
+import "./Header.css";
 function Header() {
   return (
     <>
@@ -5,18 +6,8 @@ function Header() {
         <div className="container-fluid">
           <nav className="navbar navbar-expand-lg">
             <a className="navbar-brand" href="/">
-              <img
-                src="/assets/images/logo.svg"
-                alt="logo"
-                width="150"
-                className="logo"
-              />
-              <img
-                src="/assets/images/logo-white.svg"
-                alt="white logo"
-                width="150"
-                className="logo-white"
-              />
+              <img src="/assets/images/logo.svg"alt="logo"width="150"className="logo"/>
+              <img src="/assets/images/logo-white.svg" alt="white logo"  width="150" className="logo-white" />
             </a>
 
             <button
@@ -32,35 +23,19 @@ function Header() {
             <div className="navbar-collapse" id="main-nav">
               <ul className="navbar-nav mx-auto" id="main-menu">
                 <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
+                  <button
+                    type="button"
+                    className="nav-link dropdown-toggle btn btn-link"
+                    data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     Home
-                  </a>
+                  </button>
 
                   <ul className="dropdown-menu">
                     <li>
                       <a className="dropdown-item" href="/home-v1">
                         Home Version 1
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/home-v2">
-                        Home Version 2
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/home-v3">
-                        Home Version 3
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/home-v4">
-                        Home Version 4
                       </a>
                     </li>
                   </ul>
@@ -99,95 +74,8 @@ function Header() {
                         Celebrity Detail
                       </a>
                     </li>
-                    <li className="divider" role="separator"></li>
-                    <li>
-                      <a className="dropdown-item" href="/contact-us">
-                        Contact Us
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/coming-soon">
-                        Coming Soon
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/pricing">
-                        Pricing Plan
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/login-register">
-                        Login - Register
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/testimonials">
-                        Testimonials
-                      </a>
-                    </li>
-                  </ul>
+                    </ul>
                 </li>
-
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Movies & TV Shows
-                  </a>
-
-                  <ul className="dropdown-menu">
-                    <li>
-                      <a className="dropdown-item" href="/movie-list">
-                        Movie List 1
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-list2">
-                        Movie List 2
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-grid">
-                        Movie Grid 1
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-grid2">
-                        Movie Grid 2
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-grid3">
-                        Movie Grid 3
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-grid4">
-                        Movie Grid 4
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-detail">
-                        Movie Detail
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/movie-detail2">
-                        Movie Detail 2
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/watch-later">
-                        Watch Later
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
@@ -208,19 +96,6 @@ function Header() {
                     <li>
                       <a className="dropdown-item" href="/blog-list-fullwidth">
                         Blog List Fullwidth
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/blog-post-detail">
-                        Blog Detail
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="dropdown-item"
-                        href="/blog-post-detail-fullwidth"
-                      >
-                        Blog Detail Fullwidth
                       </a>
                     </li>
                   </ul>
@@ -260,8 +135,6 @@ function Header() {
           </nav>
         </div>
       </header>
-
-    
     </>
   );
 }

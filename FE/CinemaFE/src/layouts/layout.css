@@ -11,6 +11,25 @@ body,
   flex-direction: column;
 }
 
+/* Giả sử header cao khoảng 88px */
+:root {
+  --header-height: 88px;
+}
+
+.header.header-fixed.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  z-index: 1000;
+  background: #fff;
+}
+
 .main-content {
   flex: 1;
+  min-height: 0;
+  padding-top: var(--header-height);
+  display: flex;
+  overflow: hidden;
 }
