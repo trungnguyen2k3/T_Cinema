@@ -2,8 +2,13 @@
 using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
+
+using CinemaBE.Hubs; 
+
 using CinemaBE.Tests.IntegrationTests;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CinemaBE.Services
 {

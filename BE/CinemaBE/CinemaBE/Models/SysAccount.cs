@@ -32,4 +32,8 @@ public partial class SysAccount
     public virtual ICollection<SysLog> SysLogs { get; set; } = new List<SysLog>();
 
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
+
+    public virtual ICollection<TblChat> TblChatReceivers { get; set; } = new List<TblChat>();
+
+    public virtual ICollection<TblChat> TblChatSenders { get; set; } = new List<TblChat>();
 }
