@@ -1,6 +1,11 @@
+
 ﻿using CinemaBE.Hubs;
 using CinemaBE.Models;
+
+﻿using CinemaBE.Models;
+
 using CinemaBE.Services;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +51,24 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
 
+builder.Services.AddSingleton(sp =>
+{
+    var config = builder.Configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
+
+    var account = new Account(
+        config!.CloudName,
+        config.ApiKey,
+        config.ApiSecret
+    );
+
+    var cloudinary = new Cloudinary(account);
+    cloudinary.Api.Secure = true; // luôn trả URL HTTPS
+
+    return cloudinary;
+});
 var app = builder.Build();
 
 // 7. Swagger chỉ bật ở môi trường Development
@@ -69,8 +91,13 @@ app.UseAuthorization();
 // 9. Map controller API
 app.MapControllers();
 
+
 // 10. Map SignalR Hub cho chat realtime
 app.MapHub<ChatHub>("/chatHub");
 
 // 11. Run app
 app.Run();
+
+app.Run();
+public partial class Program { }
+

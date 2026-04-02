@@ -1,8 +1,12 @@
 ﻿using CinemaBE.Commons;
-using CinemaBE.Dtos;
+using CinemaBE.Dtos.Accounts;
 using CinemaBE.Helpers;
 using CinemaBE.Models;
+
 using CinemaBE.Hubs; 
+
+using CinemaBE.Tests.IntegrationTests;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,13 +20,79 @@ namespace CinemaBE.Services
             _db = db; 
         }
 
-        public async Task<IEnumerable<SysAccount>> GetAccountsAsync()
+        public async Task<GetAccountResponseDto> DeleteAccountAsync(int id)
         {
-            var accounts = _db.SysAccounts.ToListAsync();
-            return await accounts;
+            var account = await _db.SysAccounts.FindAsync(id);
+            if (account == null || account.Status == false)
+            {
+                throw new AppException("Tài khoản không có hoặc đã bị xóa",404);
+            }
+            account.Status = false;
+            await _db.SaveChangesAsync();
+            var accounts = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).FirstOrDefaultAsync();
+            return accounts;
+
         }
 
-        public async Task<ApiResponse<SysAccountLoginResponseDto>> LoginAccountAsync(SysAccountLoginRequestDto dto)
+        public async Task<IEnumerable<GetAccountResponseDto>> GetAccountsAsync()
+        {
+            var accounts = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).ToListAsync();
+           
+            return accounts;
+        }
+
+        public async Task<GetAccountResponseDto> GetByIdAsync(int id)
+        {
+            
+            var account = await _db.SysAccounts.Select(x => new GetAccountResponseDto
+            {
+                Id = x.Id,
+                Role = x.Role,
+                Username = x.Username,
+                FullName = x.FullName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Status = x.Status,
+                CreateAt = x.CreateAt,
+                UpdateAt = x.UpdateAt,
+            }).Where(x=> x.Id == id).FirstOrDefaultAsync();
+
+            if(account == null)
+            {
+                throw new AppException("Tài khoản không tồn tại", 404);
+            }
+            return account;
+        }
+
+        public async Task<LoginResponseDto> LoginAccountAsync(LoginRequestDto dto)
         {
 
             var account = await _db.SysAccounts.FirstOrDefaultAsync(x => x.Username == dto.Username);
@@ -38,7 +108,7 @@ namespace CinemaBE.Services
             {
                 throw new AppException("Tài khoản đã bị khóa",403);
             }
-            var result = new SysAccountLoginResponseDto
+            var result = new LoginResponseDto
             {
                 Id = account.Id,
                 Username = account.Username,
@@ -52,10 +122,10 @@ namespace CinemaBE.Services
                 CreateAt = account.CreateAt,
                 UpdateAt = account.UpdateAt,
             };
-            return ApiResponse<SysAccountLoginResponseDto>.SuccessResult(result, "Đăng nhập thành công");
+            return result;
             }
 
-        public async Task<SysAccountResponseDto> RegisterAccountAsync(SysAccountRegisterDto dto)
+        public async Task<RegisterResponseDto> RegisterAccountAsync(RegisterRequestDto dto)
         {
             if (dto.Password != dto.ConfirmPassword)
                 throw new AppException("Mật khẩu xác nhận không khớp");
@@ -88,7 +158,7 @@ namespace CinemaBE.Services
             await _db.SysAccounts.AddAsync(account);
             await _db.SaveChangesAsync();
 
-            return new SysAccountResponseDto
+            return new RegisterResponseDto
             {
                 Id = account.Id,
                 Username = account.Username,
@@ -98,6 +168,27 @@ namespace CinemaBE.Services
                 PhoneNumber = account.PhoneNumber,
                 Role = account.Role,
                 Status = account.Status
+            };
+        }
+
+        public async Task<UpdateAccountResponseDto> UpdateAccountAsync(UpdatetAccountRequestDto updatetAccountRequestDto)
+        {
+           var account = await _db.SysAccounts.Where(x => x.Id == updatetAccountRequestDto.Id).FirstOrDefaultAsync();
+            if (account == null) {
+                throw new AppException("Tài khoản không tồn tại", 404);
+            }
+            account.PhoneNumber = updatetAccountRequestDto.PhoneNumber;
+            account.Password = AccountHelper.HashPassword(updatetAccountRequestDto.Password);
+            account.FullName = updatetAccountRequestDto.FullName;
+            account.Gender = updatetAccountRequestDto.Gender;
+            account.Dob = updatetAccountRequestDto.Dob;
+            _db.SaveChangesAsync();
+            return new UpdateAccountResponseDto
+            {
+                FullName = account.FullName,
+                Gender = account.Gender,
+                PhoneNumber = account.PhoneNumber,
+                Dob = account.Dob,
             };
         }
     }

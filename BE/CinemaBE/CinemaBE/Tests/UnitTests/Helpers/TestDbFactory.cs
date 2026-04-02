@@ -1,7 +1,7 @@
 ﻿using CinemaBE.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CinemaBE.Tests
+namespace CinemaBE.Tests.UnitTests.Helpers
 {
     public static class TestDbFactory
     {
