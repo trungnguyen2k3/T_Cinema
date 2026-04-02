@@ -1,5 +1,6 @@
-using CinemaBE.Models;
+﻿using CinemaBE.Models;
 using CinemaBE.Services;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -19,7 +20,24 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
 
+builder.Services.AddSingleton(sp =>
+{
+    var config = builder.Configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
+
+    var account = new Account(
+        config!.CloudName,
+        config.ApiKey,
+        config.ApiSecret
+    );
+
+    var cloudinary = new Cloudinary(account);
+    cloudinary.Api.Secure = true; // luôn trả URL HTTPS
+
+    return cloudinary;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
