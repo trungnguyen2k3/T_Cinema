@@ -31,6 +31,8 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<TblBookingDetail> TblBookingDetails { get; set; }
 
+    public virtual DbSet<TblChat> TblChats { get; set; }
+
     public virtual DbSet<TblComboDetail> TblComboDetails { get; set; }
 
     public virtual DbSet<TblImage> TblImages { get; set; }
@@ -51,9 +53,9 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<TblTimeSlot> TblTimeSlots { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=cinema;Integrated Security=True;Encrypt=False;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=cinema;Integrated Security=True;Encrypt=False;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -229,6 +231,36 @@ public partial class DatabaseContext : DbContext
                 .HasForeignKey(d => d.ShowTimeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Tbl_Booki__ShowT__693CA210");
+        });
+
+        modelBuilder.Entity<TblChat>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Chat__3214EC07D32B8191");
+
+            entity.ToTable("Tbl_Chat");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.MessageType)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValue("TEXT");
+            entity.Property(e => e.ReadAt).HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValue("SENT");
+
+            entity.HasOne(d => d.Receiver).WithMany(p => p.TblChatReceivers)
+                .HasForeignKey(d => d.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Receiver");
+
+            entity.HasOne(d => d.Sender).WithMany(p => p.TblChatSenders)
+                .HasForeignKey(d => d.SenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Sender");
         });
 
         modelBuilder.Entity<TblComboDetail>(entity =>
