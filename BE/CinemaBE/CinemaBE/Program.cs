@@ -1,9 +1,6 @@
 
 ﻿using CinemaBE.Hubs;
 using CinemaBE.Models;
-
-﻿using CinemaBE.Models;
-
 using CinemaBE.Services;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
