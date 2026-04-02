@@ -1,4 +1,6 @@
 import "./Header.css";
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <>
@@ -29,14 +31,16 @@ function Header() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Home
+                    <Link  to="/home">
+                        Home 
+                      </Link>
                   </button>
 
                   <ul className="dropdown-menu">
                     <li>
-                      <a className="dropdown-item" href="/home-v1">
+                      <Link className="dropdown-item" to="/home">
                         Home Version 1
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>
@@ -102,9 +106,9 @@ function Header() {
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/contact-us">
+                  <Link className="nav-link" to="/chat">
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
               </ul>
 
